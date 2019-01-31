@@ -156,7 +156,7 @@ public class MailEnvelopeBuilder implements Serializable {
     public MailEnvelopeBuilder addContentImage(String contentId, File file) {
         checkMimeType(false);
         if (this.contentImages.containsKey(contentId)) {
-            throw new IllegalArgumentException("repeated image content-id: " + contentId);
+            throw new IllegalArgumentException("Repeated image content-id: " + contentId);
         }
         this.contentImages.put(contentId, new FileDataSource(file));
         return this;
@@ -176,7 +176,7 @@ public class MailEnvelopeBuilder implements Serializable {
 
     private void checkMimeType(boolean isAttachments) {
         if (this.type != MailType.MIME) {
-            throw new IllegalArgumentException("operation must be mime type");
+            throw new IllegalArgumentException("Operate must be mime type.");
         }
         if (isAttachments && attachments == null) {
             attachments = new LinkedHashMap<>();
