@@ -44,8 +44,8 @@ public class ThreadPoolMailSender {
         } else { // 同步发送
             List<CompletableFuture<Boolean>> list = envlops.stream().map(
                 e -> CompletableFuture.supplyAsync(
-                   () -> mailSender.send(e), INFINITY_QUEUE_EXECUTOR
-               )
+                    () -> mailSender.send(e), INFINITY_QUEUE_EXECUTOR
+                )
             ).collect(Collectors.toList());
 
             return list.stream()
