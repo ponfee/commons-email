@@ -95,7 +95,7 @@ public class MailSender {
     private final String user;
     private final String password;
     private final String smtpHost;
-    private int port = -1;
+    private Integer port = null;
     private String nickname;
     private String charset = Files.UTF_8;
     private int retryTimes;
@@ -174,7 +174,7 @@ public class MailSender {
         this.nickname = nickname;
     }
 
-    void setPort(int port) {
+    void setPort(Integer port) {
         this.port = port;
     }
 
@@ -269,14 +269,16 @@ public class MailSender {
 
             //Transport.send(message);
             transport = session.getTransport("smtp");
-            transport.connect(smtpHost, port, user, password);
+            transport.connect(smtpHost, port == null ? -1 : port, user, password);
             transport.sendMessage(message, message.getAllRecipients());
             return true;
         } catch (MessagingException | UnsupportedEncodingException e) {
-            if (sentFailedLogger != null) try {
-                sentFailedLogger.log(logid, retries, envlop, e);
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
+            if (sentFailedLogger != null) {
+                try {
+                    sentFailedLogger.log(logid, retries, envlop, e);
+                } catch (Exception ignored) {
+                    ignored.printStackTrace();
+                }
             }
 
             if (MailConnectException.class.isInstance(e) && --retries > 0) {

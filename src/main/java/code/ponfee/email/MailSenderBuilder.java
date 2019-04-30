@@ -11,6 +11,7 @@ public final class MailSenderBuilder {
     private final String password;
     private final String smtpHost;
 
+    private Integer port;
     private String nickname;
     private boolean authRequire = true;
     private Integer connTimeout; // 建立连接超时时间
@@ -33,6 +34,11 @@ public final class MailSenderBuilder {
     public static MailSenderBuilder newBuilder(String user, String password, 
                                                String smtpHost) {
         return new MailSenderBuilder(user, password, smtpHost);
+    }
+
+    public MailSenderBuilder setPort(Integer port) {
+        this.port = port;
+        return this;
     }
 
     public MailSenderBuilder nickname(String nickname) {
@@ -76,13 +82,15 @@ public final class MailSenderBuilder {
     }
 
     public MailSender build() {
-        MailSender sender = new MailSender(user, password, smtpHost, 
-                                           authRequire, connTimeout, readTimeout);
+        MailSender sender = new MailSender(
+            user, password, smtpHost, authRequire, connTimeout, readTimeout
+        );
         sender.setNickname(nickname);
         sender.setCharset(charset);
         sender.setRetryTimes(retryTimes);
         sender.setValidateTimes(validateTimes);
         sender.setSentFailedLogger(sentFailedLogger);
+        sender.setPort(port);
         return sender;
     }
 
